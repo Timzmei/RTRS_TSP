@@ -2,11 +2,11 @@ import time
 import random
 import folium
 
-from squares import *
-from route import *
-from route_optimize import *
-from map import *
-from coordinates import get_distance_mtrx
+from squares.squares import *
+from route.route import *
+from route.route_optimize import *
+from map.map import *
+from coordinate.coordinates import get_distance_mtrx
 
 
 

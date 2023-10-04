@@ -1,4 +1,4 @@
-from coordinates import calculate_distance
+from coordinate.coordinates import calculate_distance
 from square_route_class import SquareRoute
 
 def build_square_route(squares_info, start_point, end_point):
