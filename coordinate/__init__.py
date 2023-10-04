@@ -1,1 +1,1 @@
-from coordinate import coordinaties
+from coordinate import coordinates

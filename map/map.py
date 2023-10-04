@@ -72,7 +72,7 @@ def plot_map_earth(coordinates, full_route, length_route, name):
     plt.title(f'Карта с точками и маршрутом. Длина маршрута-{length_route}')
 
     # Сохраняем карту в файл (например, PNG)
-    plt.savefig(f'/image/polar_map_{name}.png', dpi=300, bbox_inches='tight')
+    plt.savefig(f'./image/polar_map_{name}.png', dpi=300, bbox_inches='tight')
 
     # Отображаем сохраненный файл
     plt.show()

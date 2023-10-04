@@ -1,5 +1,5 @@
-from square_class import Square
-from route import calculate_nearest_point_to_center, find_nearest_point
+from squares.square_class import Square
+from route.route import calculate_nearest_point_to_center, find_nearest_point
 
 def split_map_into_squares(coordinates):
     # Определяем максимальные и минимальные значения широты и долготы точек
