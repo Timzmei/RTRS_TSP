@@ -24,6 +24,25 @@ def optimize_route(coordinates, full_route):
     # Возвращаем оптимизированный маршрут
     return optimized_route
 
+
+def optimize_route_2(coordinates, full_route):
+    # Создаем список точек, которые нужно посетить (исключая начальную и конечную точки)
+    points_to_visit = set(full_route[1:-1])  # Изменено для исключения первой и последней точек
+    optimized_route = [full_route[0]]  # Начинаем с начальной точки
+
+    current_point = full_route[0]
+
+    while points_to_visit:
+        nearest_point = find_nearest_point(current_point, points_to_visit, coordinates)
+        optimized_route.append(nearest_point)
+        points_to_visit.remove(nearest_point)
+        current_point = nearest_point
+
+    optimized_route.append(full_route[-1])  # Добавляем последнюю точку после завершения оптимизации
+
+    # Возвращаем оптимизированный маршрут
+    return optimized_route
+
 def optimize_route_swap(route, coordinates):
     # Инициализируем переменные для хранения оптимального маршрута и его длины
     best_route = route.copy()
@@ -109,6 +128,71 @@ def optimize_route_insert(full_route, coordinates, num_points_to_move):
     
     return optimized_route
 
+
+def optimize_route_2opt_2(full_route, coordinates, num_points_to_move):
+    # Создаем копию маршрута для работы
+    optimized_route = full_route.copy()
+
+    # Вычисляем длину текущего маршрута
+    current_length = calculate_route_length(optimized_route, coordinates)
+
+    # Инициализируем флаг, который будет показывать, была ли совершена хотя бы одна перестановка
+    improvement = True
+
+    while improvement:
+        improvement = False
+        for i in range(num_points_to_move,
+                       len(optimized_route) - num_points_to_move):  # Не рассматриваем первую и последнюю точки
+            for j in range(i + 1,
+                           len(optimized_route) - num_points_to_move):  # Не рассматриваем первую и последнюю точки
+                if i != j:
+                    # Создаем копию маршрута и переворачиваем подпоследовательность между i и j
+                    new_route = optimized_route.copy()
+                    new_route[i:j + 1] = reversed(new_route[i:j + 1])
+
+                    # Вычисляем длину нового маршрута
+                    new_length = calculate_route_length(new_route, coordinates)
+
+                    # Если новый маршрут короче текущего, сохраняем его
+                    if new_length < current_length:
+                        optimized_route = new_route
+                        current_length = new_length
+                        improvement = True
+
+    return optimized_route
+
+
+def optimize_route_2opt(full_route, coordinates, num_points_to_move):
+    # Создаем копию маршрута для работы
+    optimized_route = full_route.copy()
+
+    # Вычисляем длину текущего маршрута
+    current_length = calculate_route_length(optimized_route, coordinates)
+
+    # Инициализируем флаг, который будет показывать, была ли совершена хотя бы одна перестановка
+    improvement = True
+
+    while improvement:
+        improvement = False
+        for i in range(num_points_to_move, len(optimized_route) - num_points_to_move):
+            for j in range(i + 1, len(optimized_route) - num_points_to_move):
+                if i != j:
+                    # Создаем копию маршрута и переворачиваем подпоследовательность между i и j
+                    new_route = optimized_route[i:j + 1][::-1]
+                    new_route = optimized_route[:i] + new_route + optimized_route[j + 1:]
+
+                    # Вычисляем длину нового маршрута
+                    new_length = calculate_route_length(new_route, coordinates)
+
+                    # Если новый маршрут короче текущего, сохраняем его
+                    if new_length < current_length:
+                        optimized_route = new_route
+                        current_length = new_length
+                        improvement = True
+
+    return optimized_route
+
+
 # Функция для выполнения Муравьиного алгоритма в отдельном потоке
 def run_colony(args, seed):
     distance_matrix, num_ants, num_iterations, pheromone_evaporation, pheromone_constant, alpha, beta = args
@@ -177,7 +261,7 @@ def run_colony(args, seed):
 
 def ant_colony_optimization(distance_matrix, num_ants, num_iterations, pheromone_evaporation, pheromone_constant, alpha, beta):
     
-    num_colonies = 4  # Количество колоний муравьев
+    num_colonies = 6  # Количество колоний муравьев
     
     with Pool(num_colonies) as pool:
         seeds = range(num_colonies)
@@ -193,17 +277,10 @@ def ant_colony_optimization(distance_matrix, num_ants, num_iterations, pheromone
 
         for data in global_ant_routes:
             for route, length in data:
-              
-                # print(route)
-                # print(length)
-            
                 if length < min_length:
                     min_length = length
                     best_route = route
 
-
-        print(best_route)
-        print(min_length)
             
 
         # На выходе получим лучший найденный маршрут
