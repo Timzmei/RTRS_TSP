@@ -24,7 +24,7 @@ def main():
 
     # print("Файл input.txt успешно создан с 100 уникальными координатами.")
 
-    with open("/home/timurg/PycharmProjects/RTRS_TSP/input3.txt", "r") as file:
+    with open("/home/timurg/PycharmProjects/RTRS_TSP/input2.txt", "r") as file:
         data = file.readlines()
 
     # Инициализируем словарь для хранения координат

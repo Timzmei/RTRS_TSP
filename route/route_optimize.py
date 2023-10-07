@@ -193,27 +193,113 @@ def optimize_route_2opt(full_route, coordinates, num_points_to_move):
     return optimized_route
 
 
-# Функция для выполнения Муравьиного алгоритма в отдельном потоке
+# # Функция для выполнения Муравьиного алгоритма в отдельном потоке
+# def run_colony(args, seed):
+#     distance_matrix, num_ants, num_iterations, pheromone_evaporation, pheromone_constant, alpha, beta = args
+#     random.seed(seed)  # Инициализация генератора случайных чисел с уникальным зерном
+#
+#     num_points = len(distance_matrix)
+#     pheromone = [[1.0 for _ in range(num_points)] for _ in range(num_points)]
+#
+#     global_ant_routes = []
+#
+#     for iteration in range(num_iterations):
+#         ant_routes = []
+#
+#         for ant in range(num_ants):
+#             current_point = random.randint(0, num_points - 1)
+#             unvisited_points = set(range(num_points)) - {current_point}
+#             ant_route = [current_point]
+#
+#             while unvisited_points:
+#                 # Вычисляем вероятности перехода в следующую точку
+#                 probabilities = []
+#                 for next_point in unvisited_points:
+#                     pheromone_value = pheromone[current_point][next_point]
+#                     distance_value = 1.0 / distance_matrix[current_point][next_point]
+#                     probability = (pheromone_value ** alpha) * (distance_value ** beta)
+#                     probabilities.append((next_point, probability))
+#
+#                 # Выбираем следующую точку на основе вероятностей
+#                 total_probability = sum(probability for (_, probability) in probabilities)
+#                 choice = random.uniform(0, total_probability)
+#                 cumulative_probability = 0
+#                 for (next_point, probability) in probabilities:
+#                     cumulative_probability += probability
+#                     if cumulative_probability >= choice:
+#                         break
+#
+#                 # Переходим в выбранную точку и обновляем маршрут
+#                 current_point = next_point
+#                 unvisited_points.remove(current_point)
+#                 ant_route.append(current_point)
+#
+#             ant_routes.append(ant_route)
+#
+#         # Обновляем феромоны на ребрах
+#         pheromone = [[pheromone[i][j] * (1 - pheromone_evaporation) for j in range(num_points)] for i in
+#                      range(num_points)]
+#         for ant_route in ant_routes:
+#             route_length = sum(distance_matrix[i][j] for i, j in zip(ant_route, ant_route[1:]))
+#             for i, j in zip(ant_route, ant_route[1:]):
+#                 pheromone[i][j] += pheromone_constant / route_length
+#
+#         # Находим лучший маршрут на текущей итерации
+#         best_route = min(ant_routes, key=lambda route: sum(distance_matrix[i][j] for i, j in zip(route, route[1:])))
+#         best_route_length = sum(distance_matrix[i][j] for i, j in zip(best_route, best_route[1:]))
+#
+#         global_ant_routes.append((best_route, best_route_length))
+#
+#     return global_ant_routes
+#
+#
+# # Остальной код функции ant_colony_optimization
+#
+# def ant_colony_optimization(distance_matrix, num_ants, num_iterations, pheromone_evaporation, pheromone_constant, alpha,
+#                             beta):
+#     num_colonies = 6  # Количество колоний муравьев
+#
+#     with Pool(num_colonies) as pool:
+#         seeds = range(num_colonies)
+#         # Создайте частичную функцию с фиксированными аргументами
+#         partial_run_colony = partial(run_colony, (
+#         distance_matrix, num_ants, num_iterations, pheromone_evaporation, pheromone_constant, alpha, beta))
+#         # Теперь используйте partial_run_colony в pool.map()
+#         global_ant_routes = pool.map(partial_run_colony, seeds)
+#
+#     min_length = float('inf')
+#     best_route = None
+#
+#     for data in global_ant_routes:
+#         for route, length in data:
+#             if length < min_length:
+#                 min_length = length
+#                 best_route = route
+#
+#     route = list(best_route)
+#     ant_route = [x + 1 for x in route]
+#     indx = ant_route.index(1)
+#     new_ant_route = ant_route[indx:] + ant_route[:indx]
+#     new_ant_route.append(1)
+#
+#     return new_ant_route
 def run_colony(args, seed):
     distance_matrix, num_ants, num_iterations, pheromone_evaporation, pheromone_constant, alpha, beta = args
     random.seed(seed)  # Инициализация генератора случайных чисел с уникальным зерном
-    # Остальной код вашей функции ant_colony_optimization()
 
-    # Инициализация феромонов на ребрах
     num_points = len(distance_matrix)
     pheromone = [[1.0 for _ in range(num_points)] for _ in range(num_points)]
 
     global_ant_routes = []
 
-    # Основной цикл Муравьиного алгоритма
     for iteration in range(num_iterations):
         ant_routes = []
-        
+
         for ant in range(num_ants):
             current_point = random.randint(0, num_points - 1)
             unvisited_points = set(range(num_points)) - {current_point}
             ant_route = [current_point]
-            
+
             while unvisited_points:
                 # Вычисляем вероятности перехода в следующую точку
                 probabilities = []
@@ -222,7 +308,7 @@ def run_colony(args, seed):
                     distance_value = 1.0 / distance_matrix[current_point][next_point]
                     probability = (pheromone_value ** alpha) * (distance_value ** beta)
                     probabilities.append((next_point, probability))
-                
+
                 # Выбираем следующую точку на основе вероятностей
                 total_probability = sum(probability for (_, probability) in probabilities)
                 choice = random.uniform(0, total_probability)
@@ -231,69 +317,58 @@ def run_colony(args, seed):
                     cumulative_probability += probability
                     if cumulative_probability >= choice:
                         break
-                
+
                 # Переходим в выбранную точку и обновляем маршрут
                 current_point = next_point
                 unvisited_points.remove(current_point)
                 ant_route.append(current_point)
-            
+
             ant_routes.append(ant_route)
-        
+
         # Обновляем феромоны на ребрах
-        pheromone = [[pheromone[i][j] * (1 - pheromone_evaporation) for j in range(num_points)] for i in range(num_points)]
+        pheromone = [[pheromone[i][j] * (1 - pheromone_evaporation) for j in range(num_points)] for i in
+                     range(num_points)]
         for ant_route in ant_routes:
             route_length = sum(distance_matrix[i][j] for i, j in zip(ant_route, ant_route[1:]))
             for i, j in zip(ant_route, ant_route[1:]):
                 pheromone[i][j] += pheromone_constant / route_length
-        
+
         # Находим лучший маршрут на текущей итерации
         best_route = min(ant_routes, key=lambda route: sum(distance_matrix[i][j] for i, j in zip(route, route[1:])))
         best_route_length = sum(distance_matrix[i][j] for i, j in zip(best_route, best_route[1:]))
 
-        
-        # Выводим лучший маршрут на текущей итерации
-        # print(f"Iteration {iteration + 1}: Best Route = {best_route}, Length = {best_route_length}")
         global_ant_routes.append((best_route, best_route_length))
-
 
     return global_ant_routes
 
 
-def ant_colony_optimization(distance_matrix, num_ants, num_iterations, pheromone_evaporation, pheromone_constant, alpha, beta):
-    
+# Остальной код функции ant_colony_optimization
+
+def ant_colony_optimization(distance_matrix, num_ants, num_iterations, pheromone_evaporation, pheromone_constant, alpha,
+                            beta):
     num_colonies = 6  # Количество колоний муравьев
-    
+
     with Pool(num_colonies) as pool:
         seeds = range(num_colonies)
-        # Создайте частичную функцию с фиксированными аргументами, которые вы хотите передать
-        partial_run_colony = partial(run_colony, (distance_matrix, num_ants, num_iterations, pheromone_evaporation, pheromone_constant, alpha, beta))
+        # Создайте частичную функцию с фиксированными аргументами
+        partial_run_colony = partial(run_colony, (
+        distance_matrix, num_ants, num_iterations, pheromone_evaporation, pheromone_constant, alpha, beta))
         # Теперь используйте partial_run_colony в pool.map()
         global_ant_routes = pool.map(partial_run_colony, seeds)
-        
-        # print(len(global_ant_routes))
-    
-        min_length = float('inf')
-        best_route = None
 
-        for data in global_ant_routes:
-            for route, length in data:
-                if length < min_length:
-                    min_length = length
-                    best_route = route
+    min_length = float('inf')
+    best_route = None
 
-            
+    for data in global_ant_routes:
+        for route, length in data:
+            if length < min_length:
+                min_length = length
+                best_route = route
 
-        # На выходе получим лучший найденный маршрут
-        # print(f"Best Route: {global_best_route}, Length: {global_bst_route_length}")
-        
-        # Найдем индекс числа 1 в списке
-        route = list(best_route)
-        
-        ant_route = [x+1 for x in route]
-        indx = ant_route.index(1)
+    route = list(best_route)
+    ant_route = [x + 1 for x in route]
+    indx = ant_route.index(1)
+    new_ant_route = ant_route[indx:] + ant_route[:indx]
+    new_ant_route.append(1)
 
-        # Создаем новый список с левой частью от 1 в конце
-        new_ant_route = ant_route[indx:] + ant_route[:indx]
-        new_ant_route.append(1)
-    
     return new_ant_route
