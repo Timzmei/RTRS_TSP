@@ -22,7 +22,7 @@ def main():
 
     # print("Файл input.txt успешно создан с 100 уникальными координатами.")
 
-    with open("input2.txt", "r") as file:
+    with open("input.txt", "r") as file:
         data = file.readlines()
 
     # Инициализируем словарь для хранения координат
@@ -38,7 +38,7 @@ def main():
     num_ants = 10
     num_iterations = 100
     pheromone_evaporation = 0.3
-    pheromone_constant = 1.5
+    pheromone_constant = 1.0
     alpha = 1.0
     beta = 2.0
 
@@ -48,21 +48,23 @@ def main():
     ant_route_length = calculate_route_length(ant_route, coordinates)
     print("Длина маршрута Ant:", ant_route_length)
     #
-    plot_map_earth(coordinates, ant_route, ant_route_length, 'ant_route')
+    # plot_map_earth(coordinates, ant_route, ant_route_length, 'ant_route')
     #
     optimize_ant_route = optimize_route_insert(ant_route, coordinates, 1)
     optimize_ant_route1 = optimize_route_2opt(optimize_ant_route, coordinates, 1)
-    optimize_ant_route2 = optimize_route_insert(optimize_ant_route1, coordinates, 2)
-    # optimize_ant_route3 = optimize_route_insert(optimize_ant_route2, coordinates, 3)
-    optimize_ant_route4 = optimize_route_insert(optimize_ant_route2, coordinates, 1)
-    # optimize_ant_route5 = optimize_route_2opt(optimize_ant_route4, coordinates, 1)
+    optimize_ant_route2 = optimize_route_insert(optimize_ant_route1, coordinates, 1)
+    optimize_ant_route3 = optimize_route_2opt(optimize_ant_route2, coordinates, 1)
+    optimize_ant_route4 = optimize_route_insert(optimize_ant_route3, coordinates, 5)
+    optimize_ant_route5 = optimize_route_2opt(optimize_ant_route4, coordinates, 1)
+    optimize_ant_route6 = optimize_route_insert(optimize_ant_route5, coordinates, 1)
+
     optimize_ant_route_length = calculate_route_length(optimize_ant_route, coordinates)
     optimize_ant_route_length1 = calculate_route_length(optimize_ant_route1, coordinates)
     optimize_ant_route_length2 = calculate_route_length(optimize_ant_route2, coordinates)
-    # optimize_ant_route_length3 = calculate_route_length(optimize_ant_route3, coordinates)
+    optimize_ant_route_length3 = calculate_route_length(optimize_ant_route3, coordinates)
     optimize_ant_route_length4 = calculate_route_length(optimize_ant_route4, coordinates)
-    # optimize_ant_route_length5 = calculate_route_length(optimize_ant_route5, coordinates)
-
+    optimize_ant_route_length5 = calculate_route_length(optimize_ant_route5, coordinates)
+    optimize_ant_route_length6 = calculate_route_length(optimize_ant_route6, coordinates)
     #
     # print("Полный маршрут optimize_ant_route_length:", optimize_ant_route)
     # print("Количество точек optimize_ant_route_length:", len(optimize_ant_route))
@@ -75,12 +77,14 @@ def main():
     # plot_map_earth(coordinates, optimize_ant_route1, optimize_ant_route_length1, 'optimize_ant_route1')
     print('Длина оптимизированного маршрута optimize_ant_route_length2:', optimize_ant_route_length2)
     # plot_map_earth(coordinates, optimize_ant_route2, optimize_ant_route_length2, 'optimize_ant_route2')
-    # print('Длина оптимизированного маршрута optimize_ant_route_length3:', optimize_ant_route_length3)
+    print('Длина оптимизированного маршрута optimize_ant_route_length3:', optimize_ant_route_length3)
     # plot_map_earth(coordinates, optimize_ant_route3, optimize_ant_route_length3, 'optimize_ant_route3')
     print('Длина оптимизированного маршрута optimize_ant_route_length4:', optimize_ant_route_length4)
     # plot_map_earth(coordinates, optimize_ant_route4, optimize_ant_route_length4, 'optimize_ant_route4')
-    # print('Длина оптимизированного маршрута optimize_ant_route_length5:', optimize_ant_route_length5)
+    print('Длина оптимизированного маршрута optimize_ant_route_length5:', optimize_ant_route_length5)
     # plot_map_earth(coordinates, optimize_ant_route5, optimize_ant_route_length5, 'optimize_ant_route5')
+    print('Длина оптимизированного маршрута optimize_ant_route_length6:', optimize_ant_route_length6)
+    plot_map_earth(coordinates, optimize_ant_route6, optimize_ant_route_length6, 'ant_route')
 
     # Создание файла output.txt с результатами
     with open("output.txt", "w") as output_file:
