@@ -1,4 +1,6 @@
 import random
+from collections import deque
+
 from multiprocessing import Pool
 from functools import partial
 from route.route import find_nearest_point, calculate_route_length
@@ -45,36 +47,42 @@ def optimize_route_swap(route, coordinates):
 
     return best_route
 
+
 def optimize_route_insert(full_route, coordinates, num_points_to_move):
-    # Создаем копию маршрута для работы
-    optimized_route = full_route.copy()
-    
+    # Создаем копию маршрута в виде списка
+    optimized_route = list(full_route)
+
     # Инициализируем флаг, который будет показывать, была ли совершена хотя бы одна перестановка
     improvement = True
-    
+
     while improvement:
         improvement = False
-        for i in range(num_points_to_move, len(optimized_route) - num_points_to_move):  # Не рассматриваем первую и последнюю точки
-            for j in range(num_points_to_move, len(optimized_route) - num_points_to_move):  # Не рассматриваем первую и последнюю точки
+        i = num_points_to_move
+        while i < len(optimized_route) - num_points_to_move:
+            j = num_points_to_move
+            while j < len(optimized_route) - num_points_to_move:
                 if i != j:
                     # Создаем копию маршрута и перемещаем num_points_to_move точек начиная с i между точками j и j+1
-                    new_route = optimized_route.copy()
-                    points_to_move = new_route[i:i+num_points_to_move]
-                    for point in points_to_move:
-                        new_route.remove(point)
-                    new_route[j:j] = points_to_move
-                    
+                    new_route = list(optimized_route)
+                    points_to_move = new_route[i:i + num_points_to_move]
+                    for _ in range(num_points_to_move):
+                        new_route.pop(i)
+                    for point in reversed(points_to_move):
+                        new_route.insert(j, point)
+
                     # Вычисляем длину нового маршрута
                     new_length = calculate_route_length(new_route, coordinates)
-                    
+
                     # Вычисляем длину текущего маршрута
                     current_length = calculate_route_length(optimized_route, coordinates)
-                    
+
                     # Если новый маршрут короче текущего, сохраняем его
                     if new_length < current_length:
                         optimized_route = new_route
                         improvement = True
-    
+                j += 1
+            i += 1
+
     return optimized_route
 
 
@@ -204,7 +212,7 @@ def run_colony(args, seed):
 
 def ant_colony_optimization(distance_matrix, num_ants, num_iterations, pheromone_evaporation, pheromone_constant, alpha,
                             beta):
-    num_colonies = 12  # Количество колоний муравьев
+    num_colonies = 6  # Количество колоний муравьев
 
     with Pool(num_colonies) as pool:
         seeds = range(num_colonies)

@@ -1,4 +1,5 @@
 import time
+
 import random
 from route.route_optimize import *
 from map.map import *
@@ -21,7 +22,7 @@ def main():
 
     # print("Файл input.txt успешно создан с 100 уникальными координатами.")
 
-    with open("/home/timurg/PycharmProjects/RTRS_TSP/input2.txt", "r") as file:
+    with open("input2.txt", "r") as file:
         data = file.readlines()
 
     # Инициализируем словарь для хранения координат
@@ -47,7 +48,7 @@ def main():
     ant_route_length = calculate_route_length(ant_route, coordinates)
     print("Длина маршрута Ant:", ant_route_length)
     #
-    plot_map_earth(coordinates, ant_route, ant_route_length, 'ant_route')
+    # plot_map_earth(coordinates, ant_route, ant_route_length, 'ant_route')
     #
     optimize_ant_route = optimize_route_insert(ant_route, coordinates, 1)
     optimize_ant_route1 = optimize_route_2opt(optimize_ant_route, coordinates, 1)
@@ -66,18 +67,18 @@ def main():
     # print("Полный маршрут optimize_ant_route_length:", optimize_ant_route)
     # print("Количество точек optimize_ant_route_length:", len(optimize_ant_route))
     print('Длина оптимизированного маршрута optimize_ant_route_length:', optimize_ant_route_length)
-    plot_map_earth(coordinates, optimize_ant_route, optimize_ant_route_length, 'optimize_ant_route')
+    # plot_map_earth(coordinates, optimize_ant_route, optimize_ant_route_length, 'optimize_ant_route')
     #
     # print("Полный маршрут optimize_ant_route_length:", optimize_ant_route1)
     # print("Количество точек optimize_ant_route_length:", len(optimize_ant_route1))
     print('Длина оптимизированного маршрута optimize_ant_route_length1:', optimize_ant_route_length1)
-    plot_map_earth(coordinates, optimize_ant_route1, optimize_ant_route_length1, 'optimize_ant_route1')
+    # plot_map_earth(coordinates, optimize_ant_route1, optimize_ant_route_length1, 'optimize_ant_route1')
     print('Длина оптимизированного маршрута optimize_ant_route_length2:', optimize_ant_route_length2)
-    plot_map_earth(coordinates, optimize_ant_route2, optimize_ant_route_length2, 'optimize_ant_route2')
+    # plot_map_earth(coordinates, optimize_ant_route2, optimize_ant_route_length2, 'optimize_ant_route2')
     # print('Длина оптимизированного маршрута optimize_ant_route_length3:', optimize_ant_route_length3)
     # plot_map_earth(coordinates, optimize_ant_route3, optimize_ant_route_length3, 'optimize_ant_route3')
     print('Длина оптимизированного маршрута optimize_ant_route_length4:', optimize_ant_route_length4)
-    plot_map_earth(coordinates, optimize_ant_route4, optimize_ant_route_length4, 'optimize_ant_route4')
+    # plot_map_earth(coordinates, optimize_ant_route4, optimize_ant_route_length4, 'optimize_ant_route4')
     # print('Длина оптимизированного маршрута optimize_ant_route_length5:', optimize_ant_route_length5)
     # plot_map_earth(coordinates, optimize_ant_route5, optimize_ant_route_length5, 'optimize_ant_route5')
 
