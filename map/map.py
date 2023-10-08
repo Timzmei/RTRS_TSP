@@ -2,9 +2,35 @@ import numpy as np
 import matplotlib.pyplot as plt
 from mpl_toolkits.basemap import Basemap
 
+from mpl_toolkits.basemap import Basemap
+import matplotlib.pyplot as plt
+
+def choose_projection(coordinates):
+    # Определите минимальные и максимальные значения широты и долготы на основе координат маршрута.
+    min_lat = min(latitude for latitude, _ in coordinates.values())
+    max_lat = max(latitude for latitude, _ in coordinates.values())
+    min_lon = min(longitude for _, longitude in coordinates.values())
+    max_lon = max(longitude for _, longitude in coordinates.values())
+
+    # Проверьте, находится ли маршрут в области полюсов.
+    is_polar_region = min_lat <= -60 or max_lat >= 60
+
+    # Определите проекцию в зависимости от области мира.
+    if is_polar_region:
+        # Для области полюсов используйте проекцию spstere с настройками boundinglat и lon_0.
+        return {'projection': 'spstere', 'boundinglat': -60, 'lon_0': (min_lon + max_lon) / 2}
+    else:
+        # Для остальных случаев, используйте Mercator.
+        return 'merc'
+
 def plot_map_earth(coordinates, full_route, length_route, name):
-    # Создаем карту проекции полюса
-    m = Basemap(projection='spstere', boundinglat=-60, lon_0=0, resolution='l')
+    # Выберите проекцию на основе координат маршрута
+    projection = choose_projection(coordinates)
+
+    # Создайте карту с выбранной проекцией
+    m = Basemap(**projection, resolution='l')
+
+
 
     # Создаем фигуру для отображения карты
     fig = plt.figure(figsize=(8, 8))

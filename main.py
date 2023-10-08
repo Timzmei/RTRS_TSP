@@ -48,7 +48,7 @@ def main():
     ant_route_length = calculate_route_length(ant_route, coordinates)
     print("Длина маршрута Ant:", ant_route_length)
     #
-    # plot_map_earth(coordinates, ant_route, ant_route_length, 'ant_route')
+    plot_map_earth(coordinates, ant_route, ant_route_length, 'ant_route')
     #
     optimize_ant_route = optimize_route_insert(ant_route, coordinates, 1)
     optimize_ant_route1 = optimize_route_2opt(optimize_ant_route, coordinates, 1)
