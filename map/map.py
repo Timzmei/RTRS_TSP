@@ -2,38 +2,6 @@ import numpy as np
 import matplotlib.pyplot as plt
 from mpl_toolkits.basemap import Basemap
 
-def plot_map(coordinates, full_route, name):
-    # Разбиваем координаты на широту и долготу
-    lats, lons = zip(*coordinates.values())
-
-    # Создаем новую фигуру
-    plt.figure(figsize=(10, 8))
-
-    # Рисуем точки
-    plt.scatter(lons, lats, c='blue', label='Точки')
-
-    # Рисуем маршрут
-    route_lats = [coordinates[point][0] for point in full_route]
-    route_lons = [coordinates[point][1] for point in full_route]
-    plt.plot(route_lons, route_lats, c='red', linewidth=2, label='Маршрут')
-
-    # Добавляем метки для точек
-    for point, (lat, lon) in coordinates.items():
-        plt.annotate(point, (lon, lat), fontsize=12, ha='center', va='bottom')
-
-    # Настройки для отображения
-    plt.title(f'Отображение точек и маршрута {name}')
-    plt.xlabel('Долгота')
-    plt.ylabel('Широта')
-    plt.legend()
-    plt.grid(True)
-
-
-    # Сохраняем карту в файл (например, PNG)
-    plt.savefig(f'/image/{name}.png')
-    # Отображаем карту
-    plt.show()
-
 def plot_map_earth(coordinates, full_route, length_route, name):
     # Создаем карту проекции полюса
     m = Basemap(projection='spstere', boundinglat=-60, lon_0=0, resolution='l')
