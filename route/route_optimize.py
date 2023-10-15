@@ -3,6 +3,7 @@ from collections import deque
 
 from multiprocessing import Pool
 from functools import partial
+from re import S
 from route.route import find_nearest_point, calculate_route_length
 
 
@@ -216,6 +217,7 @@ def ant_colony_optimization(distance_matrix, num_ants, num_iterations, pheromone
 
     with Pool(num_colonies) as pool:
         seeds = range(num_colonies)
+        # print('seeds = ', seeds)
         # Создайте частичную функцию с фиксированными аргументами
         partial_run_colony = partial(run_colony, (
         distance_matrix, num_ants, num_iterations, pheromone_evaporation, pheromone_constant, alpha, beta))
