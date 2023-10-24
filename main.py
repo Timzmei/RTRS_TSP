@@ -21,13 +21,16 @@ def begin():
 
     # Получите путь к текущей директории (где находится ваш exe файл)
     # exe_directory = os.path.dirname(sys.executable)
-    exe_directory = os.path.dirname(os.path.abspath(__file__))
+    # exe_directory = os.path.dirname(os.path.abspath(__file__))
+    if getattr(sys, 'frozen', False):
+        # Скрипт запущен как экзешник (скомпилированный)
+        exe_directory = os.path.dirname(sys.executable)
+    else:
+        # Скрипт запущен из исходного кода (из IDE)
+        exe_directory = os.path.dirname(os.path.abspath(__file__))
     # Затем используйте относительные пути относительно текущей директории
     file_path_input = os.path.join(exe_directory, "input.txt")
     file_path_output = os.path.join(exe_directory, "output.txt")
-
-    # print(exe_directory)
-    # print(file_path_input)
 
     coordinates = read_file({}, file_path_input)
 
@@ -63,7 +66,7 @@ def write_file(file_path_output, optimize_ant_route2, optimize_ant_route_length2
     with open(file_path_output, "w") as output_file:
         # Записываем фамилию, имя и отчество участника
         output_file.write("Гулиев Тимур Абрекович\n")
-        output_file.write(f"Время выполнения: {execution_time}\n")
+        # output_file.write(f"Время выполнения: {execution_time}\n")
         # Записываем длину минимального маршрута
         output_file.write(str(int(optimize_ant_route_length2)) + "\n")
 
