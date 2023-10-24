@@ -1,16 +1,10 @@
 import time
 import os
-# import logging
 import sys
 from multiprocessing import freeze_support
 
 from route.route_optimize import *
 from coordinate.coordinates import get_distance_mtrx
-
-
-
-
-
 
 def begin():
     # Записываем текущее время перед выполнением кода
