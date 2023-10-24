@@ -1,52 +1,8 @@
 import random
-from collections import deque
 
 from multiprocessing import Pool
 from functools import partial
-from re import S
-from route.route import find_nearest_point, calculate_route_length
-
-
-def optimize_route_2(coordinates, full_route):
-    # Создаем список точек, которые нужно посетить (исключая начальную и конечную точки)
-    points_to_visit = set(full_route[1:-1])  # Изменено для исключения первой и последней точек
-    optimized_route = [full_route[0]]  # Начинаем с начальной точки
-
-    current_point = full_route[0]
-
-    while points_to_visit:
-        nearest_point = find_nearest_point(current_point, points_to_visit, coordinates)
-        optimized_route.append(nearest_point)
-        points_to_visit.remove(nearest_point)
-        current_point = nearest_point
-
-    optimized_route.append(full_route[-1])  # Добавляем последнюю точку после завершения оптимизации
-
-    # Возвращаем оптимизированный маршрут
-    return optimized_route
-
-def optimize_route_swap(route, coordinates):
-    # Инициализируем переменные для хранения оптимального маршрута и его длины
-    best_route = route.copy()
-    best_length = calculate_route_length(route, coordinates)
-
-    # Перебираем точки маршрута, кроме первой и последней
-    for i in range(1, len(route) - 1):
-        for j in range(i + 1, len(route) - 1):
-            # Создаем копию маршрута для перестановки точек
-            new_route = route.copy()
-            # Переставляем точки i и j
-            new_route[i], new_route[j] = new_route[j], new_route[i]
-            
-            # Вычисляем длину нового маршрута
-            new_length = calculate_route_length(new_route, coordinates)
-
-            # Если новая длина меньше лучшей, обновляем лучший маршрут и его длину
-            if new_length < best_length:
-                best_route = new_route
-                best_length = new_length
-
-    return best_route
+from route.route import calculate_route_length
 
 
 def optimize_route_insert(full_route, coordinates, num_points_to_move):
@@ -85,40 +41,6 @@ def optimize_route_insert(full_route, coordinates, num_points_to_move):
             i += 1
 
     return optimized_route
-
-
-def optimize_route_2opt_2(full_route, coordinates, num_points_to_move):
-    # Создаем копию маршрута для работы
-    optimized_route = full_route.copy()
-
-    # Вычисляем длину текущего маршрута
-    current_length = calculate_route_length(optimized_route, coordinates)
-
-    # Инициализируем флаг, который будет показывать, была ли совершена хотя бы одна перестановка
-    improvement = True
-
-    while improvement:
-        improvement = False
-        for i in range(num_points_to_move,
-                       len(optimized_route) - num_points_to_move):  # Не рассматриваем первую и последнюю точки
-            for j in range(i + 1,
-                           len(optimized_route) - num_points_to_move):  # Не рассматриваем первую и последнюю точки
-                if i != j:
-                    # Создаем копию маршрута и переворачиваем подпоследовательность между i и j
-                    new_route = optimized_route.copy()
-                    new_route[i:j + 1] = reversed(new_route[i:j + 1])
-
-                    # Вычисляем длину нового маршрута
-                    new_length = calculate_route_length(new_route, coordinates)
-
-                    # Если новый маршрут короче текущего, сохраняем его
-                    if new_length < current_length:
-                        optimized_route = new_route
-                        current_length = new_length
-                        improvement = True
-
-    return optimized_route
-
 
 def optimize_route_2opt(full_route, coordinates, num_points_to_move):
     # Создаем копию маршрута для работы
@@ -213,10 +135,7 @@ def run_colony(args, seed):
 
 def ant_colony_optimization(distance_matrix, num_ants, num_iterations, pheromone_evaporation, pheromone_constant, alpha,
                             beta):
-
-    input("Нажмите Enter для продолжения  ant_colony_optimization...")
-
-    num_colonies = 6  # Количество колоний муравьев
+    num_colonies = 4  # Количество колоний муравьев
 
     with Pool(num_colonies) as pool:
         seeds = range(num_colonies)
