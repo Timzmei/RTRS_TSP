@@ -1,6 +1,4 @@
 import math
-import numpy as np
-
 
 # Функция для вычисления расстояния между двумя точками по координатам
 def calculate_distance(coord1, coord2):
@@ -28,10 +26,14 @@ def calculate_distance(coord1, coord2):
     distance = radius * c
     return distance
 
+
 def get_distance_mtrx(coordinates):
-    distance_matrix = np.zeros((len(coordinates), len(coordinates)))
-    for i in range(len(coordinates)):
-        for j in range(len(coordinates)):
+    num_points = len(coordinates)
+    distance_matrix = [[0.0] * num_points for _ in range(num_points)]
+
+    for i in range(num_points):
+        for j in range(num_points):
             if i != j:
                 distance_matrix[i][j] = calculate_distance(coordinates[i + 1], coordinates[j + 1])
+
     return distance_matrix

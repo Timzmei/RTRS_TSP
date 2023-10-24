@@ -213,6 +213,9 @@ def run_colony(args, seed):
 
 def ant_colony_optimization(distance_matrix, num_ants, num_iterations, pheromone_evaporation, pheromone_constant, alpha,
                             beta):
+
+    input("Нажмите Enter для продолжения  ant_colony_optimization...")
+
     num_colonies = 6  # Количество колоний муравьев
 
     with Pool(num_colonies) as pool:
@@ -223,6 +226,8 @@ def ant_colony_optimization(distance_matrix, num_ants, num_iterations, pheromone
         distance_matrix, num_ants, num_iterations, pheromone_evaporation, pheromone_constant, alpha, beta))
         # Теперь используйте partial_run_colony в pool.map()
         global_ant_routes = pool.map(partial_run_colony, seeds)
+
+
 
     min_length = float('inf')
     best_route = None
