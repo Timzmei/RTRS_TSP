@@ -20,8 +20,8 @@ def begin():
 
 
     # Получите путь к текущей директории (где находится ваш exe файл)
-    exe_directory = os.path.dirname(sys.executable)
-    # exe_directory = os.path.dirname(os.path.abspath(__file__))
+    # exe_directory = os.path.dirname(sys.executable)
+    exe_directory = os.path.dirname(os.path.abspath(__file__))
     # Затем используйте относительные пути относительно текущей директории
     file_path_input = os.path.join(exe_directory, "input.txt")
     file_path_output = os.path.join(exe_directory, "output.txt")
@@ -53,7 +53,7 @@ def begin():
 
     # Вычисляем время выполнения в секундах
     execution_time = end_time - start_time
-    print(f"Время выполнения кода: {execution_time} секунд")
+    # print(f"Время выполнения кода: {execution_time} секунд")
 
     # Создание файла output.txt с результатами
     write_file(file_path_output, optimize_ant_route2, optimize_ant_route_length2, execution_time)
@@ -110,5 +110,5 @@ if __name__ == '__main__':
 
     # Вычисляем время выполнения в секундах
     execution_time = end_time - start_time
-    print(f"Время выполнения кода: {execution_time} секунд")
+    # print(f"Время выполнения кода: {execution_time} секунд")
     # input("Начало цикла main...")

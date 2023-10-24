@@ -135,7 +135,7 @@ def run_colony(args, seed):
 
 def ant_colony_optimization(distance_matrix, num_ants, num_iterations, pheromone_evaporation, pheromone_constant, alpha,
                             beta):
-    num_colonies = 4  # Количество колоний муравьев
+    num_colonies = 6  # Количество колоний муравьев
 
     with Pool(num_colonies) as pool:
         seeds = range(num_colonies)
